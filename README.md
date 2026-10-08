@@ -150,15 +150,21 @@ Render `.env.example` as a Markdown table. With `--inject README.md` it replaces
 <!-- envguard:end -->
 ```
 
-The table for the example above looks like this:
+Here is the table generated from [`examples/basic/.env.example`](./examples/basic/.env.example). CI regenerates it on every push and fails if this README is out of date.
 
+<!-- envguard:start -->
 | Variable | Required | Type | Example | Description |
 | --- | --- | --- | --- | --- |
 | `NODE_ENV` | yes | enum: `development`, `production`, `test` | `development` | Environment the app runs in |
 | `PORT` | yes | port | `3000` | Port the HTTP server listens on |
+| `API_URL` | yes | url, matches `/^https?://[^/]+$/` | `http://localhost:3000` | Public base URL of the API, without a trailing slash |
 | `DATABASE_URL` | yes | url | _(secret)_ | PostgreSQL connection string |
+| `DB_POOL_SIZE` | yes | int, 1–100 | `10` | Max connections in the pool |
 | `SENTRY_DSN` | no | url | _(secret)_ | Error reporting; leave empty to disable |
+| `SUPPORT_EMAIL` | yes | email | `support@example.com` | Address shown in outgoing emails |
 | `FEATURE_FLAGS` | no | json | `{"newDashboard":false}` | Feature flags as a JSON object |
+| `DEBUG` | yes | bool | `false` | Verbose logging |
+<!-- envguard:end -->
 
 ## Using it in CI
 

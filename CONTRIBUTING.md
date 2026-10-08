@@ -17,6 +17,7 @@ cd envguard
 npm test          # runs the whole suite with node:test, no install step needed
 npm run lint      # syntax, trailing whitespace, indentation
 npm run demo      # runs the CLI against examples/basic
+npm run docs      # regenerates the README table after editing examples/basic/.env.example
 ```
 
 Try the CLI directly while developing:

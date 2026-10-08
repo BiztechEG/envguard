@@ -76,4 +76,4 @@ jobs:
       - name: Assert the broken env file failed the action
         run: test "${{ steps.broken.outcome }}" = failure
       - name: The README table must be current
-        run: node bin/envguard.js docs -x examples/basic/.env.example > /dev/null
+        run: node bin/envguard.js docs -x examples/basic/.env.example --inject README.md --check

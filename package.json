@@ -30,6 +30,7 @@
     "test:coverage": "node --test --experimental-test-coverage",
     "lint": "node scripts/lint.js",
     "check": "npm run lint && npm test",
-    "demo": "node bin/envguard.js check --env examples/basic/.env --example examples/basic/.env.example"
+    "demo": "node bin/envguard.js check --env examples/basic/.env --example examples/basic/.env.example",
+    "docs": "node bin/envguard.js docs --example examples/basic/.env.example --inject README.md"
   }
 }
