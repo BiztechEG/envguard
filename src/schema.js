@@ -22,7 +22,8 @@
  * Supported annotations:
  *   @type <t>        string (default) | int | float | bool | url | email | port | json | uuid | enum
  *   @enum a,b,c      allowed values (implies @type enum)
- *   @pattern <re>    JavaScript regular expression the value must match (rest of the line)
+ *   @pattern <re>    JavaScript regular expression the value must match (rest of the line);
+ *                    write /re/flags to use flags such as i
  *   @min / @max      numeric bounds for numeric types, length bounds for strings
  *   @optional        variable may be missing or empty
  *   @required        the default; included for clarity
@@ -58,6 +59,7 @@ const REST_OF_LINE_TAGS = new Set(['pattern', 'regex', 'desc', 'description']);
  * @property {boolean} required
  * @property {string[]|null} enum
  * @property {string|null} pattern
+ * @property {string} patternFlags  Regular expression flags, e.g. "i".
  * @property {number|null} min
  * @property {number|null} max
  * @property {boolean} secret
@@ -114,6 +116,7 @@ function buildRule(entry, comments, errors, warnings) {
     required: true,
     enum: null,
     pattern: null,
+    patternFlags: '',
     min: null,
     max: null,
     secret: false,
@@ -218,13 +221,17 @@ function applyTag(rule, { name, arg }, errors, warnings) {
     case 'pattern':
     case 'regex': {
       if (!arg) return fail(`@${name} needs a regular expression`);
-      const source = arg.length > 1 && arg.startsWith('/') && arg.endsWith('/') ? arg.slice(1, -1) : arg;
+      // Accept both a bare expression and the /expression/flags literal form.
+      const literal = /^\/(.+)\/([a-z]*)$/s.exec(arg);
+      const source = literal ? literal[1] : arg;
+      const flags = literal ? literal[2] : '';
       try {
-        new RegExp(source);
+        new RegExp(source, flags);
       } catch (error) {
         return fail(`invalid @${name} ${arg}: ${error.message}`);
       }
       rule.pattern = source;
+      rule.patternFlags = flags;
       return;
     }
     case 'min':

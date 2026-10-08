@@ -81,7 +81,7 @@ Write them in the comment block directly above a variable (no blank line in betw
 | --- | --- |
 | `@type <t>` | Expected shape. One of `string` (default), `int`, `float`, `bool`, `url`, `email`, `port`, `json`, `uuid`, `enum`. |
 | `@enum a,b,c` | Allowed values. Implies `@type enum`. |
-| `@pattern <regex>` | JavaScript regular expression the value must match. Uses the rest of the line, so it may contain spaces and `@`. |
+| `@pattern <regex>` | JavaScript regular expression the value must match. Uses the rest of the line, so it may contain spaces and `@`. Write `/regex/i` to add flags. |
 | `@min N` / `@max N` | Bounds. Numeric for `int`, `float` and `port`; length in characters for everything else. |
 | `@optional` | The variable may be missing or empty. When it is set, it is still validated. |
 | `@required` | The default. Written out when you want to be explicit. |

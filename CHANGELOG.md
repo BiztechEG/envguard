@@ -8,6 +8,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 - An unterminated quote no longer swallows the rest of the file; parsing resumes on the next line, so later variables are not reported as missing.
 - `@type url` now requires a scheme followed by `//`. Values such as `localhost:3000` were accepted before.
+- `@pattern /regex/flags` now honours the flags. Before, the whole text including the slashes and flags was used as the expression, so nothing matched.
 
 ## [0.1.0] - 2026-10-08
 

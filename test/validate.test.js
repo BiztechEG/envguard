@@ -88,6 +88,11 @@ test('pattern applies on top of the type', () => {
   bad('https://example.com/', { type: 'url', pattern: '[^/]$' });
 });
 
+test('pattern flags are applied and shown in the message', () => {
+  ok('ABC', { pattern: '^abc$', patternFlags: 'i' });
+  bad('ABD', { pattern: '^abc$', patternFlags: 'i' }, /does not match pattern \/\^abc\$\/i$/);
+});
+
 test('min and max bound numbers for numeric types', () => {
   ok('5', { type: 'int', min: 1, max: 10 });
   bad('0', { type: 'int', min: 1 }, /at least 1/);

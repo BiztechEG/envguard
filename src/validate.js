@@ -65,8 +65,8 @@ export function validateValue(value, rule) {
       return `unknown type "${rule.type}"`;
   }
 
-  if (rule.pattern != null && !new RegExp(rule.pattern).test(value)) {
-    return `does not match pattern /${rule.pattern}/`;
+  if (rule.pattern != null && !new RegExp(rule.pattern, rule.patternFlags ?? '').test(value)) {
+    return `does not match pattern /${rule.pattern}/${rule.patternFlags ?? ''}`;
   }
 
   if (rule.min != null || rule.max != null) {

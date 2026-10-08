@@ -27,6 +27,11 @@ test('renderDocs produces a Markdown table', () => {
   assert.equal(lines[5], '| `S` | yes | string, 2–4 chars |  | a \\| pipe |');
 });
 
+test('renderDocs shows pattern flags', () => {
+  const md = renderDocs(parseSchema('# @pattern /^[a-z]+$/i\nX=a'));
+  assert.match(md, /matches `\/\^\[a-z\]\+\$\/i`/);
+});
+
 test('renderDocs handles an empty schema', () => {
   assert.match(renderDocs(parseSchema('')), /No environment variables/);
 });

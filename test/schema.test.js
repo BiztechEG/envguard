@@ -72,6 +72,18 @@ test('@pattern swallows the rest of the line and accepts slashes', () => {
   assert.equal(rule('# @pattern /^\\d+$/\nX=', 'X').pattern, '^\\d+$');
 });
 
+test('@pattern accepts the /expression/flags form', () => {
+  const r = rule('# @pattern /^abc$/i\nX=', 'X');
+  assert.equal(r.pattern, '^abc$');
+  assert.equal(r.patternFlags, 'i');
+  assert.equal(rule('# @pattern ^abc$\nX=', 'X').patternFlags, '');
+});
+
+test('unknown @pattern flags are a schema error', () => {
+  const schema = parseSchema('# @pattern /abc/q\nX=');
+  assert.match(schema.errors[0].message, /invalid @pattern/);
+});
+
 test('an invalid @pattern is a schema error', () => {
   const schema = parseSchema('# @pattern [unclosed\nX=');
   assert.match(schema.errors[0].message, /invalid @pattern/);

@@ -58,7 +58,7 @@ function typeLabel(rule) {
     else if (rule.min != null) parts.push(`≥ ${rule.min}${unit}`);
     else parts.push(`≤ ${rule.max}${unit}`);
   }
-  if (rule.pattern) parts.push(`matches \`/${escapeCell(rule.pattern)}/\``);
+  if (rule.pattern) parts.push(`matches \`/${escapeCell(rule.pattern)}/${rule.patternFlags ?? ''}\``);
   return parts.join(', ');
 }
 
