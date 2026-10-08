@@ -36,6 +36,12 @@ npm install --save-dev envguard   # or: pnpm add -D envguard / yarn add -D envgu
 npx envguard --help
 ```
 
+To use the latest code from GitHub instead of the npm release:
+
+```sh
+npm install --save-dev github:BiztechEG/envguard
+```
+
 Requires Node.js 18 or newer. There is nothing else to install.
 
 ## Quick start
@@ -167,13 +173,17 @@ In CI there is usually no `.env` file; the configuration comes from real environ
     NODE_ENV: test
 ```
 
-Or use the bundled action:
+Or use the bundled action. It runs the copy of envguard that ships with the action, so nothing is downloaded from npm and the version always matches the ref you pin. GitHub-hosted runners already have Node.js; on a self-hosted runner, add `actions/setup-node` first.
 
 ```yaml
-- uses: BiztechEG/envguard@main
+- uses: BiztechEG/envguard@main   # pin a release tag once one exists
   with:
-    process-env: true
+    example: .env.example   # default
+    process-env: true       # or: env: .env.production
     strict: true
+    args: --allow-unknown   # optional extra flags
+  env:
+    DATABASE_URL: ${{ secrets.DATABASE_URL }}
 ```
 
 Two other checks that are worth running in CI: `envguard sync` (nobody added a variable without documenting it) and `envguard docs --inject README.md --check` (the README table is current).

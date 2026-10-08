@@ -23,6 +23,9 @@
 ```sh
 npm install --save-dev envguard
 npx envguard --help
+
+# أو آخر نسخة من GitHub مباشرة
+npm install --save-dev github:BiztechEG/envguard
 ```
 
 <div dir="rtl">
@@ -106,6 +109,21 @@ npx envguard --strict   # التحذيرات كمان بتوقّع الـ build
   env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
     NODE_ENV: test
+```
+
+<div dir="rtl">
+
+أو استخدم الـ GitHub Action الجاهزة. بتشغّل نسخة envguard اللي جوه الـ Action نفسها، فمش بتنزّل حاجة من npm.
+
+</div>
+
+```yaml
+- uses: BiztechEG/envguard@main
+  with:
+    process-env: true
+    strict: true
+  env:
+    DATABASE_URL: ${{ secrets.DATABASE_URL }}
 ```
 
 <div dir="rtl">

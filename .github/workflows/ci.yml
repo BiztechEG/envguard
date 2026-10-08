@@ -51,5 +51,29 @@ jobs:
           DB_POOL_SIZE: '5'
           SUPPORT_EMAIL: ci@example.com
           DEBUG: 'false'
+      - name: The bundled action passes on a valid environment
+        uses: ./
+        with:
+          example: examples/basic/.env.example
+          process-env: true
+          strict: true
+        env:
+          NODE_ENV: test
+          PORT: '3000'
+          API_URL: http://localhost:3000
+          DATABASE_URL: postgres://ci:ci@localhost:5432/ci
+          DB_POOL_SIZE: '5'
+          SUPPORT_EMAIL: ci@example.com
+          DEBUG: 'false'
+      - name: The bundled action fails on a broken env file
+        id: broken
+        continue-on-error: true
+        uses: ./
+        with:
+          env: examples/basic/.env
+          example: examples/basic/.env.example
+          args: --no-git
+      - name: Assert the broken env file failed the action
+        run: test "${{ steps.broken.outcome }}" = failure
       - name: The README table must be current
         run: node bin/envguard.js docs -x examples/basic/.env.example > /dev/null

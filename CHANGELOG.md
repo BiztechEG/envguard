@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- The GitHub Action runs the copy of envguard that ships with it instead of downloading it from npm. Its version always matches the ref in `uses:`, and the `version` input was removed. The `args` input no longer expands shell wildcards.
+
 ### Fixed
 
 - An unterminated quote no longer swallows the rest of the file; parsing resumes on the next line, so later variables are not reported as missing.
