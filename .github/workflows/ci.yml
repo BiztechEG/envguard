@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm run lint
+      - run: npm test
+
+  dogfood:
+    name: envguard checks its own example
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: The bundled example must fail with exactly the documented problems
+        run: |
+          set +e
+          node bin/envguard.js check -e examples/basic/.env -x examples/basic/.env.example --no-git --json > report.json
+          status=$?
+          set -e
+          test "$status" -eq 1
+          node -e "const r=require('./report.json'); if (r.summary.errors!==7||r.summary.warnings!==1) { console.error(r.summary); process.exit(1) }"
+      - name: Validate the job environment against the example
+        run: node bin/envguard.js check --process-env -x examples/basic/.env.example --strict
+        env:
+          NODE_ENV: test
+          PORT: '3000'
+          API_URL: http://localhost:3000
+          DATABASE_URL: postgres://ci:ci@localhost:5432/ci
+          DB_POOL_SIZE: '5'
+          SUPPORT_EMAIL: ci@example.com
+          DEBUG: 'false'
+      - name: The README table must be current
+        run: node bin/envguard.js docs -x examples/basic/.env.example > /dev/null
