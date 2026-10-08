@@ -12,6 +12,10 @@
  *
  * The parser never throws on bad input. Problems are collected in `errors`
  * with 1-based line numbers so they can be reported to the user.
+ *
+ * Error messages never quote the offending text. A malformed line is often
+ * part of a secret (for example an unquoted multi-line private key), and
+ * these messages end up in terminal and CI logs.
  */
 
 const KEY_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
@@ -66,7 +70,7 @@ export function parseEnv(source) {
 
     const eq = rest.indexOf('=');
     if (eq === -1) {
-      errors.push({ line: lineNo, message: `expected KEY=value but found "${truncate(trimmed)}"` });
+      errors.push({ line: lineNo, message: 'expected KEY=value (is a multi-line value missing its quotes?)' });
       continue;
     }
 
@@ -78,7 +82,7 @@ export function parseEnv(source) {
     if (!KEY_RE.test(key)) {
       errors.push({
         line: lineNo,
-        message: `invalid variable name "${truncate(key)}" (use letters, digits and underscores; it cannot start with a digit)`,
+        message: 'invalid variable name (use letters, digits and underscores; it cannot start with a digit)',
       });
       continue;
     }
@@ -112,7 +116,7 @@ export function parseEnv(source) {
       endLine = j + 1;
       const tail = buffer.slice(closeAt + 1).trim();
       if (tail !== '' && !tail.startsWith('#')) {
-        errors.push({ line: endLine, message: `unexpected text after closing quote for ${key}: "${truncate(tail)}"` });
+        errors.push({ line: endLine, message: `unexpected text after the closing quote of ${key}` });
         continue;
       }
       value = buffer.slice(0, closeAt);
@@ -185,8 +189,4 @@ function findDuplicates(entries) {
     }
   }
   return duplicates;
-}
-
-function truncate(text, max = 40) {
-  return text.length > max ? `${text.slice(0, max - 1)}…` : text;
 }

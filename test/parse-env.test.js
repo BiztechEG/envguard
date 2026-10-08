@@ -64,6 +64,7 @@ test('reports lines without an equals sign', () => {
   assert.equal(parsed.errors.length, 1);
   assert.equal(parsed.errors[0].line, 2);
   assert.match(parsed.errors[0].message, /expected KEY=value/);
+  assert.doesNotMatch(parsed.errors[0].message, /JUSTAWORD/);
   assert.deepEqual(toObject(parsed.entries), { FOO: '1', BAR: '2' });
 });
 
@@ -91,7 +92,23 @@ test('reports unterminated quotes and keeps parsing the following lines', () => 
 
 test('reports text after a closing quote', () => {
   const parsed = parseEnv('A="x" trailing');
-  assert.match(parsed.errors[0].message, /unexpected text after closing quote/);
+  assert.match(parsed.errors[0].message, /unexpected text after the closing quote of A/);
+  assert.doesNotMatch(parsed.errors[0].message, /trailing/);
+});
+
+test('syntax errors never quote the offending text', () => {
+  const secret = 'MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7';
+  const source = [
+    'PRIVATE_KEY=-----BEGIN PRIVATE KEY-----',
+    secret,
+    `${secret}+/x=1`,
+    `TOKEN="abc"${secret}`,
+  ].join('\n');
+  const parsed = parseEnv(source);
+  assert.equal(parsed.errors.length, 3);
+  for (const error of parsed.errors) {
+    assert.ok(!error.message.includes(secret.slice(0, 12)), error.message);
+  }
 });
 
 test('tracks duplicate keys and lets the last one win', () => {
