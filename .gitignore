@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+*.log
+.DS_Store
+
+# Real env files at the repository root. Files under examples/ are fixtures and are committed on purpose.
+/.env
+/.env.*
+!/.env.example

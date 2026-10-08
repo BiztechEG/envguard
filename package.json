@@ -1,0 +1,35 @@
+{
+  "name": "envguard",
+  "version": "0.1.0",
+  "description": "Keep your .env files honest: validate .env against an annotated .env.example, generate docs, and catch secrets before they hit git.",
+  "keywords": ["dotenv", "env", "environment variables", "validation", "lint", "schema", "cli", "config", "12-factor", "ci"],
+  "license": "MIT",
+  "author": "Amr Abd-Rabou (https://github.com/amrsoft13)",
+  "homepage": "https://github.com/BiztechEG/envguard#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BiztechEG/envguard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BiztechEG/envguard/issues"
+  },
+  "type": "module",
+  "bin": {
+    "envguard": "./bin/envguard.js"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": ["bin", "src", "action.yml", "README.md", "README.ar.md", "LICENSE"],
+  "engines": {
+    "node": ">=18.11"
+  },
+  "scripts": {
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage",
+    "lint": "node scripts/lint.js",
+    "check": "npm run lint && npm test",
+    "demo": "node bin/envguard.js check --env examples/basic/.env --example examples/basic/.env.example"
+  }
+}
