@@ -83,11 +83,15 @@ export function validateValue(value, rule) {
   return null;
 }
 
+// A scheme followed by "//". Without this check `new URL()` happily accepts
+// values like "localhost:3000", treating "localhost:" as the scheme.
+const URL_SCHEME_RE = /^[a-z][a-z0-9+.-]*:\/\//i;
+
 function isUrl(value) {
-  if (/\s/.test(value)) return false;
+  if (/\s/.test(value) || !URL_SCHEME_RE.test(value)) return false;
   try {
-    const url = new URL(value);
-    return url.protocol.length > 1;
+    new URL(value);
+    return true;
   } catch {
     return false;
   }

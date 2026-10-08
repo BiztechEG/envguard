@@ -7,6 +7,7 @@ All notable changes to this project are documented here. The format follows [Kee
 ### Fixed
 
 - An unterminated quote no longer swallows the rest of the file; parsing resumes on the next line, so later variables are not reported as missing.
+- `@type url` now requires a scheme followed by `//`. Values such as `localhost:3000` were accepted before.
 
 ## [0.1.0] - 2026-10-08
 

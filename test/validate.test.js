@@ -40,8 +40,16 @@ test('url', () => {
   ok('https://example.com/path?x=1', { type: 'url' });
   ok('postgres://user:pw@host:5432/db', { type: 'url' });
   ok('redis://localhost', { type: 'url' });
+  ok('file:///var/run/app.sock', { type: 'url' });
   bad('example.com', { type: 'url' }, /expected a URL/);
   bad('http://with space.com', { type: 'url' });
+});
+
+test('url rejects values without a scheme that new URL() would accept', () => {
+  bad('localhost:3000', { type: 'url' }, /expected a URL/);
+  bad('example.com:443', { type: 'url' }, /expected a URL/);
+  bad('db:5432/app', { type: 'url' }, /expected a URL/);
+  bad('mailto:ops@example.com', { type: 'url' }, /expected a URL/);
 });
 
 test('email', () => {

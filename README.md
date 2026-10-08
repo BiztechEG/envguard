@@ -88,7 +88,7 @@ Write them in the comment block directly above a variable (no blank line in betw
 | `@secret` | The value is sensitive. It is never echoed in messages and is hidden in generated docs. |
 | `@desc <text>` | Description. Plain comment text does the same thing. |
 
-Accepted booleans: `true/false`, `1/0`, `yes/no`, `on/off` (case-insensitive). An `@` glued to a word, as in `ops@example.com`, is not an annotation. Unknown annotations are reported as warnings, so typos do not go unnoticed.
+A `url` must start with a scheme followed by `//`, such as `https://` or `postgres://`, so `localhost:3000` is rejected. Accepted booleans: `true/false`, `1/0`, `yes/no`, `on/off` (case-insensitive). An `@` glued to a word, as in `ops@example.com`, is not an annotation. Unknown annotations are reported as warnings, so typos do not go unnoticed.
 
 ## Commands
 
