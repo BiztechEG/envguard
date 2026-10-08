@@ -31,6 +31,8 @@
  *   @desc <text>     description (rest of the line); plain comment text works too
  *
  * An `@` glued to a word (like an email address) is not an annotation.
+ * A commented-out variable such as `# REDIS_URL=redis://localhost` ends the
+ * comment block, so it never becomes part of the next variable's description.
  */
 
 import { parseEnv } from './parse-env.js';
@@ -102,10 +104,16 @@ function commentBlockAbove(lines, lineNo) {
   for (let i = lineNo - 2; i >= 0; i--) {
     const text = lines[i].trim();
     if (!text.startsWith('#')) break;
-    block.unshift(text.replace(/^#+\s?/, ''));
+    const comment = text.replace(/^#+\s?/, '');
+    // A commented-out variable (`# REDIS_URL=...`) ends the block: it and the
+    // comments above it describe that variable, not this one.
+    if (COMMENTED_OUT_RE.test(comment)) break;
+    block.unshift(comment);
   }
   return block;
 }
+
+const COMMENTED_OUT_RE = /^(export\s+)?[A-Za-z_][A-Za-z0-9_]*=/;
 
 function buildRule(entry, comments, errors, warnings) {
   /** @type {Rule} */

@@ -23,6 +23,25 @@ test('a blank line detaches a comment block', () => {
   assert.equal(r.description, '');
 });
 
+test('a commented-out variable ends the comment block', () => {
+  const source = [
+    '# Cache server, disabled by default',
+    '# REDIS_URL=redis://localhost',
+    '# export OLD_NAME=1',
+    '# Primary database',
+    '# @type url',
+    'DATABASE_URL=',
+  ].join('\n');
+  const r = rule(source, 'DATABASE_URL');
+  assert.equal(r.description, 'Primary database');
+  assert.equal(r.type, 'url');
+  assert.equal(rule('# REDIS_URL=redis://localhost\nDATABASE_URL=', 'DATABASE_URL').description, '');
+});
+
+test('text that merely mentions an assignment is still a description', () => {
+  assert.equal(rule('# Format: user=password\nX=', 'X').description, 'Format: user=password');
+});
+
 test('parses several annotations on one line', () => {
   const r = rule('# @type int @min 1 @max 65535\nPORT=', 'PORT');
   assert.equal(r.type, 'int');
