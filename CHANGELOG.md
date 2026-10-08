@@ -10,6 +10,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - `@type url` now requires a scheme followed by `//`. Values such as `localhost:3000` were accepted before.
 - `@pattern /regex/flags` now honours the flags. Before, the whole text including the slashes and flags was used as the expression, so nothing matched.
 - Syntax errors no longer quote the offending line. A malformed line is often part of a secret, such as an unquoted multi-line private key, and the text ended up in CI logs.
+- The git check no longer warns about env files outside the current repository. Git now runs from the env file's own directory.
 
 ## [0.1.0] - 2026-10-08
 

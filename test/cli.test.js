@@ -239,6 +239,26 @@ test('check warns when the env file is not ignored or is tracked by git', { skip
   assert.match(tracked.stdout, /⚠ .*\.env is tracked by git.*git rm --cached \.env/);
 });
 
+test('the git check judges an env file by the repository that contains it', { skip: !hasGit }, async () => {
+  const repo = project({ '.env.example': 'A=\n', '.gitignore': '.env\n' });
+  spawnSync('git', ['init', '-q'], { cwd: repo });
+
+  // A file outside any repository is skipped, even when run from inside one.
+  const outside = project({ 'app.env': 'A=1\n' });
+  const external = await cli(repo, 'check', '-e', path.join(outside, 'app.env'));
+  assert.equal(external.code, 0);
+  assert.doesNotMatch(external.stdout, /git/);
+
+  // A file in a subdirectory is matched against the repository's .gitignore.
+  fs.mkdirSync(path.join(repo, 'config'));
+  fs.writeFileSync(path.join(repo, 'config', '.env'), 'A=1\n');
+  assert.doesNotMatch((await cli(repo, 'check', '-e', 'config/.env')).stdout, /git/);
+
+  // A file that is not ignored is still reported.
+  fs.writeFileSync(path.join(repo, 'config', 'prod.env'), 'A=1\n');
+  assert.match((await cli(repo, 'check', '-e', 'config/prod.env')).stdout, /config\/prod\.env is not ignored by git/);
+});
+
 test('the bin entry runs end to end', () => {
   const dir = project({ '.env.example': EXAMPLE, '.env': 'PORT=80\nDATABASE_URL=postgres://x\n' });
   const result = spawnSync(process.execPath, [BIN, 'check', '--no-git'], { cwd: dir, encoding: 'utf8' });
