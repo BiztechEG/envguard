@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- Release workflow: pushing a `v*` tag publishes the package to npm with provenance and creates a GitHub release from the changelog.
+
 ### Changed
 
 - envguard now requires Node.js 20 or newer. Node 18 reached end of life in April 2025. CI tests Node 20, 22 and 24.

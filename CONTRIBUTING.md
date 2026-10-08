@@ -59,6 +59,17 @@ Keep the pure modules pure: no file system, no `process`, no terminal. That is w
 - Write a short description of *why*, not just *what*. Include a before/after snippet of CLI output when it changes.
 - Follow the existing code style: two-space indentation, single quotes, semicolons, descriptive names, JSDoc on exported functions.
 
+## Releasing
+
+Maintainers publish from CI, never from a laptop.
+
+1. Add an `NPM_TOKEN` repository secret once: an npm automation or granular access token that can publish `envguard`.
+2. Move the *Unreleased* entries in `CHANGELOG.md` under a new `## [x.y.z] - YYYY-MM-DD` heading and update the links at the bottom.
+3. Set the same version in `package.json`, commit, and push to `main`.
+4. Tag and push: `git tag vx.y.z && git push origin vx.y.z`.
+
+The Release workflow checks that the tag matches `package.json` and that the changelog has a section for it, runs lint and tests, publishes to npm with provenance, and creates a GitHub release from that changelog section.
+
 ## Reporting bugs
 
 Open an issue with the smallest `.env.example` and `.env` that reproduce the problem, the command you ran, the output you got, and your Node.js version (`node --version`). Please redact real secrets.

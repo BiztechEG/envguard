@@ -15,7 +15,7 @@
   },
   "type": "module",
   "bin": {
-    "envguard": "./bin/envguard.js"
+    "envguard": "bin/envguard.js"
   },
   "exports": {
     ".": "./src/index.js",
