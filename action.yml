@@ -32,7 +32,7 @@ runs:
   steps:
     # Runs the copy of envguard that ships with this action, so the version
     # always matches the ref in `uses:` and nothing is downloaded from npm.
-    # Needs Node.js 18+ on the runner; GitHub-hosted runners include it.
+    # Needs Node.js 20+ on the runner; GitHub-hosted runners include it.
     - name: Run envguard
       shell: bash
       run: |

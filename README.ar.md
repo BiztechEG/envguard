@@ -30,7 +30,7 @@ npm install --save-dev github:BiztechEG/envguard
 
 <div dir="rtl">
 
-محتاج Node.js 18 أو أحدث، ومفيش أي حاجة تانية.
+محتاج Node.js 20 أو أحدث، ومفيش أي حاجة تانية.
 
 ## البداية السريعة
 

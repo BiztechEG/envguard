@@ -42,7 +42,7 @@ To use the latest code from GitHub instead of the npm release:
 npm install --save-dev github:BiztechEG/envguard
 ```
 
-Requires Node.js 18 or newer. There is nothing else to install.
+Requires Node.js 20 or newer. There is nothing else to install.
 
 ## Quick start
 

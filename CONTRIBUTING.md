@@ -5,7 +5,7 @@ Thanks for taking the time. Bug reports, feature ideas, documentation fixes and 
 ## Ground rules
 
 - **Zero runtime dependencies.** This is a deliberate design choice. Pull requests that add one will be asked to inline the functionality instead.
-- **Node.js 18+.** Use only APIs available in Node 18 (`node:test`, `node:util.parseArgs`, ES modules).
+- **Node.js 20+.** Use only APIs available in Node 20 (`node:test`, `node:util.parseArgs`, ES modules). CI runs Node 20, 22 and 24.
 - **Never print secret values.** Anything that might echo a value must respect the `@secret` flag.
 - **Keep the CLI predictable.** Exit codes are part of the contract: `0` fine, `1` problems found, `2` usage error.
 

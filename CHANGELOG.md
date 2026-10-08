@@ -6,6 +6,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Changed
 
+- envguard now requires Node.js 20 or newer. Node 18 reached end of life in April 2025. CI tests Node 20, 22 and 24.
 - The GitHub Action runs the copy of envguard that ships with it instead of downloading it from npm. Its version always matches the ref in `uses:`, and the `version` input was removed. The `args` input no longer expands shell wildcards.
 
 ### Fixed
