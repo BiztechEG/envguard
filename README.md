@@ -234,15 +234,17 @@ Variable names must match `[A-Za-z_][A-Za-z0-9_]*`. `${VAR}` interpolation is le
 
 ## Comparison
 
-| | envguard | dotenv-linter | envalid / zod | dotenv-safe |
-| --- | --- | --- | --- | --- |
-| Validates value types and ranges | yes | no | yes | no |
-| Language agnostic (checks files, not code) | yes | yes | no | no |
-| Schema lives in `.env.example` | yes | n/a | no | partly |
-| Checks the real process env in CI | yes | no | yes | yes |
-| Generates docs | yes | no | no | no |
-| Git hygiene warning | yes | no | no | no |
-| Runtime dependencies | 0 | binary | 1+ | 1+ |
+| | envguard | [dotenv-linter](https://github.com/dotenv-linter/dotenv-linter) | [envalid](https://github.com/af/envalid) | [zod](https://github.com/colinhacks/zod) | [dotenv-safe](https://github.com/rolodato/dotenv-safe) |
+| --- | --- | --- | --- | --- | --- |
+| Validates value types and ranges | yes | no | yes | yes, in your code | no |
+| Language agnostic (checks files, not code) | yes | yes | no | no | no |
+| Schema lives in `.env.example` | yes | no | no | no | presence only |
+| Checks the real process env in CI | yes | no | yes | yes, in your code | yes |
+| Generates docs | yes | no | no | no | no |
+| Git hygiene warning | yes | no | no | no | no |
+| Runtime dependencies | 0 | standalone binary | 1 | 0 | `dotenv` as a peer |
+
+These tools solve different problems and work well together: dotenv-linter checks the style of the file, and envalid or zod give you typed config inside a Node.js app. Dependency counts come from each package's npm metadata in October 2026. Please open an issue if something here is out of date.
 
 ## Contributing
 
