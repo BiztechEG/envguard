@@ -11,6 +11,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Fixed
 
+- Trailing spaces on the first line of a multi-line quoted value are kept. They used to be trimmed away.
 - A commented-out variable such as `# REDIS_URL=redis://localhost` directly above another variable no longer becomes that variable's description.
 - `envguard docs --inject` ignores markers inside fenced code blocks and requires each marker on its own line. A README that showed the markers as an example used to get the table injected into that example.
 - An unterminated quote no longer swallows the rest of the file; parsing resumes on the next line, so later variables are not reported as missing.

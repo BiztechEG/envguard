@@ -55,6 +55,15 @@ test('quoted values may span several lines', () => {
   assert.equal(parsed.entries[1].line, 5);
 });
 
+test('trailing spaces inside a multi-line quoted value are kept', () => {
+  assert.equal(parseEnv('A="foo   \nbar"').entries[0].value, 'foo   \nbar');
+  assert.equal(parseEnv("A='x  \n  y'").entries[0].value, 'x  \n  y');
+});
+
+test('whitespace around unquoted and single-line quoted values is trimmed', () => {
+  assert.deepEqual(values('A=  spaced  \nB="q"   \nC=\'s\'  # note\n  export D = 1  '), { A: 'spaced', B: 'q', C: 's', D: '1' });
+});
+
 test('a comment may follow a closing quote', () => {
   assert.deepEqual(values('A="x" # note'), { A: 'x' });
 });

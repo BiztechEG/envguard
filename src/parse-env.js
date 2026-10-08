@@ -57,10 +57,12 @@ export function parseEnv(source) {
 
   for (let i = 0; i < lines.length; i++) {
     const lineNo = i + 1;
-    const trimmed = lines[i].trim();
-    if (trimmed === '' || trimmed.startsWith('#')) continue;
+    // Only leading whitespace is dropped here: trailing spaces on the first
+    // line of a multi-line quoted value are part of the value.
+    const line = lines[i].trimStart();
+    if (line.trim() === '' || line.startsWith('#')) continue;
 
-    let rest = trimmed;
+    let rest = line;
     let exported = false;
     const exportMatch = /^export\s+(.*)$/.exec(rest);
     if (exportMatch) {
@@ -87,7 +89,7 @@ export function parseEnv(source) {
       continue;
     }
 
-    const afterEq = rest.slice(eq + 1).trim();
+    const afterEq = rest.slice(eq + 1).trimStart();
     let value;
     /** @type {'"'|"'"|null} */
     let quote = null;
