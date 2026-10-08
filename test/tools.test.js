@@ -43,6 +43,21 @@ test('injectDocs replaces the block between the markers and keeps the rest', () 
   assert.equal(injectDocs(result, '| new |\n'), result, 'idempotent');
 });
 
+test('injectDocs ignores markers inside fenced code blocks', () => {
+  const example = `\`\`\`md\n${START_MARKER}\n${END_MARKER}\n\`\`\``;
+  const tildes = `~~~\n${START_MARKER}\n~~~`;
+  const doc = `Intro\n${example}\n${tildes}\n\n${START_MARKER}\nold\n${END_MARKER}\nTail\n`;
+  const result = injectDocs(doc, '| new |');
+  assert.equal(result, `Intro\n${example}\n${tildes}\n\n${START_MARKER}\n| new |\n${END_MARKER}\nTail\n`);
+  assert.equal(injectDocs(example, 'x'), null, 'markers only inside a code block do not count');
+});
+
+test('injectDocs only accepts markers on their own line and keeps CRLF documents intact', () => {
+  assert.equal(injectDocs(`text ${START_MARKER} ${END_MARKER}`, 'x'), null);
+  const crlf = `A\r\n${START_MARKER}\r\nold\r\n${END_MARKER}\r\nB\r\n`;
+  assert.equal(injectDocs(crlf, 'new'), `A\r\n${START_MARKER}\nnew\n${END_MARKER}\r\nB\r\n`);
+});
+
 test('injectDocs returns null without markers', () => {
   assert.equal(injectDocs('nothing here', 'x'), null);
   assert.equal(injectDocs(`${END_MARKER}\n${START_MARKER}`, 'x'), null, 'markers in the wrong order');

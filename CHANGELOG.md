@@ -10,6 +10,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Fixed
 
+- `envguard docs --inject` ignores markers inside fenced code blocks and requires each marker on its own line. A README that showed the markers as an example used to get the table injected into that example.
 - An unterminated quote no longer swallows the rest of the file; parsing resumes on the next line, so later variables are not reported as missing.
 - `@type url` now requires a scheme followed by `//`. Values such as `localhost:3000` were accepted before.
 - `@pattern /regex/flags` now honours the flags. Before, the whole text including the slashes and flags was used as the expression, so nothing matched.
