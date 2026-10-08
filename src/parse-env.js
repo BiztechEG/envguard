@@ -104,8 +104,8 @@ export function parseEnv(source) {
           line: lineNo,
           message: `unterminated ${quote === '"' ? 'double' : 'single'}-quoted value for ${key}`,
         });
-        // Consume the rest of the file: everything after is part of the broken value.
-        i = lines.length;
+        // Resume on the next line so one stray quote does not hide every
+        // variable below it.
         continue;
       }
       i = j;

@@ -77,11 +77,16 @@ test('reports invalid variable names', () => {
   assert.deepEqual(toObject(parsed.entries), { FINE_1: 'ok' });
 });
 
-test('reports unterminated quotes', () => {
-  const parsed = parseEnv('A="never closed\nB=2');
-  assert.equal(parsed.errors.length, 1);
-  assert.match(parsed.errors[0].message, /unterminated double-quoted value for A/);
-  assert.equal(parsed.entries.length, 0);
+test('reports unterminated quotes and keeps parsing the following lines', () => {
+  const parsed = parseEnv('A="never closed\nB=2\nC=\'also open\nD=4');
+  assert.deepEqual(
+    parsed.errors.map((e) => [e.line, e.message]),
+    [
+      [1, 'unterminated double-quoted value for A'],
+      [3, 'unterminated single-quoted value for C'],
+    ],
+  );
+  assert.deepEqual(toObject(parsed.entries), { B: '2', D: '4' });
 });
 
 test('reports text after a closing quote', () => {

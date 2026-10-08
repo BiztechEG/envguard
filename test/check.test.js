@@ -73,6 +73,11 @@ test('syntax errors in the env file are errors', () => {
   assert.equal(report.problems[0].line, 4);
 });
 
+test('an unterminated quote does not make later variables look missing', () => {
+  const report = run('PORT="8080\nDATABASE_URL=x://y\nMODE=a\n');
+  assert.deepEqual(codes(report), ['error:syntax:-', 'error:missing:PORT']);
+});
+
 test('schema problems surface in the report, pointing at the example file', () => {
   const schema = parseSchema('# @type nope\nX=\n# @owner me\nY=');
   const report = check({ schema, env: envFromParsed(parseEnv('X=1\nY=2')) });
